@@ -1,0 +1,27 @@
+name: Validate BREACHWAVE
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run simulation tests
+        run: npm test
+      - name: Validate JavaScript syntax
+        run: |
+          node --check src/engine.mjs
+          node --check src/content.mjs
+          node --check src/main.mjs
+          node --check scripts/serve.mjs

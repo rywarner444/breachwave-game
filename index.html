@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07111e" />
+    <meta name="description" content="BREACHWAVE — a tactical cybersecurity defense game. Defend the network, investigate synthetic threats, and command AEGIS." />
+    <title>BREACHWAVE | Tactical Cyber Defense</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="BREACHWAVE">
+          <div class="brand-mark" aria-hidden="true"><span>⌁</span></div>
+          <div><div class="brand-title">BREACH<span>WAVE</span></div><div class="brand-subtitle">TACTICAL CYBER DEFENSE</div></div>
+        </div>
+        <div class="top-actions">
+          <span class="build-tag">OPERATIONAL BUILD 0.2</span>
+          <button id="audioButton" class="btn btn-ghost" type="button" aria-pressed="false" title="Toggle optional sound effects">♫ <span>Sound Off</span></button>
+          <button id="engineeringButton" class="btn btn-ghost" type="button" aria-pressed="false" title="View simulated automation traces">⌘ <span>Engineering View</span></button>
+          <button id="helpButton" class="btn btn-ghost" type="button">? <span>How to Play</span></button>
+          <button id="pauseButton" class="btn btn-ghost" type="button" disabled>Ⅱ <span>Pause</span></button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="arena-panel" aria-labelledby="arenaTitle">
+          <div class="panel-head">
+            <div><div class="overline">MISSION CONTROL / LIVE TOPOLOGY</div><h1 id="arenaTitle">Defend the network<span class="punctuation">.</span></h1></div>
+            <span id="missionState" class="state-chip"><span class="live-dot"></span> STANDBY</span>
+          </div>
+          <div class="mission-strip"><div><span id="missionSector" class="mission-sector">SECTOR 01</span><strong id="missionName">QUICK DEFENSE</strong><span id="missionObjective">Maintain network integrity through four waves.</span></div><span id="difficultyChip" class="difficulty-chip">OPERATOR MODE</span></div>
+          <div class="hud" aria-label="Current mission statistics">
+            <div class="stat stat-integrity"><span class="stat-label">NETWORK INTEGRITY</span><strong id="integrityValue">100<span>%</span></strong><div class="meter"><span id="integrityBar" style="width:100%"></span></div></div>
+            <div class="stat"><span class="stat-label">DEFENSE CREDITS</span><strong id="creditsValue">160</strong><div class="stat-caption">AVAILABLE RESOURCES</div></div>
+            <div class="stat"><span class="stat-label">CURRENT WAVE</span><strong id="waveValue">01<span>/04</span></strong><div class="stat-caption">THREATS ESCALATING</div></div>
+            <div class="stat"><span class="stat-label">MISSION SCORE</span><strong id="scoreValue">0000</strong><div class="stat-caption">SECURITY PERFORMANCE</div></div>
+          </div>
+          <div class="canvas-frame">
+            <div class="canvas-corner corner-tl"></div><div class="canvas-corner corner-tr"></div><div class="canvas-corner corner-bl"></div><div class="canvas-corner corner-br"></div>
+            <canvas id="battlefield" aria-label="Interactive simulated network map. Select an approaching threat by clicking its red or amber alert marker."></canvas>
+            <div class="canvas-topline"><span><span class="live-dot"></span> NETWORK TELEMETRY</span><span id="flowStatus">FLOW NOMINAL · LIVE</span></div>
+            <div class="canvas-footer"><span><span class="legend-dot safe"></span> PROTECTED SYSTEM</span><span><span class="legend-dot threat"></span> INBOUND SIGNAL</span><span><span class="legend-dot link"></span> LIVE DATA FLOW</span></div>
+          </div>
+          <div class="countermeasure-panel">
+            <div class="countermeasure-header"><div><div class="overline">TACTICAL AUTOMATION</div><h2>Countermeasures <small>Spend credits to gain an edge</small></h2></div><span id="activeEffects" class="effect-status">SYSTEMS READY</span></div>
+            <div id="abilityGrid" class="ability-grid" aria-label="Unlockable defensive abilities"></div>
+          </div>
+          <div id="tutorialBanner" class="tutorial-banner" role="status" hidden>
+            <div class="tutorial-badge">GUIDED TUTORIAL <span id="tutorialCounter">1/5</span></div>
+            <div class="tutorial-message"><strong id="tutorialTitle">Welcome, Commander.</strong><p id="tutorialText"></p></div>
+            <div class="tutorial-actions"><button id="tutorialNext" type="button" class="btn btn-primary">Continue →</button><button id="tutorialSkip" type="button" class="btn btn-text">Skip tutorial</button></div>
+          </div>
+          <div class="event-ticker"><span class="ticker-label">ACTIVITY FEED</span><p id="eventText" role="status">Network defense systems standing by.</p><span class="ticker-time">LIVE</span></div>
+          <section id="engineeringPanel" class="engineering-panel" hidden aria-labelledby="engineeringTitle">
+            <div class="engineering-head"><div><div class="overline">OBSERVABILITY / SIMULATED AUTOMATION</div><h2 id="engineeringTitle">Engineering view</h2></div><span>LOCAL · DETERMINISTIC · AUDITABLE</span></div>
+            <p>Inspect the event stream and read-only AEGIS tool steps. All telemetry is fictional; no external APIs, infrastructure, or model credits are used.</p>
+            <div class="engineering-columns"><div><h3>EVENT STREAM</h3><ol id="engineeringEvents" class="trace-list"></ol></div><div><h3>AEGIS REASONING TRACE</h3><div id="engineeringTrace" class="trace-list">Ask AEGIS about an alert to see its tool trace.</div></div></div>
+          </section>
+        </section>
+
+        <aside class="sidebar" aria-label="Threat investigation and security copilot">
+          <section class="side-panel alerts-panel">
+            <div class="side-panel-heading"><div><div class="overline">SIGNAL INTELLIGENCE</div><h2>Active alerts</h2></div><span id="alertCount" class="count-pill">0</span></div>
+            <div id="alertList" class="alert-list" aria-live="polite"><div class="empty-state">No incoming alerts. Start a mission to defend your network.</div></div>
+          </section>
+          <section class="side-panel investigation-panel">
+            <div class="side-panel-heading"><div><div class="overline">RESPONSE WORKSPACE</div><h2>Threat analysis</h2></div><span class="signal-bars" aria-hidden="true">▂▄▆</span></div>
+            <div id="threatDetail" class="threat-detail"><div class="empty-state">Select an alert on the map or in the alert list to begin your investigation.</div></div>
+            <div class="action-grid">
+              <button id="investigateButton" type="button" class="btn action-btn" disabled>⌕ <span>Investigate</span></button>
+              <button id="blockButton" type="button" class="btn action-btn btn-danger" disabled>⛨ <span>Block</span></button>
+              <button id="allowButton" type="button" class="btn action-btn" disabled>✓ <span>Allow</span></button>
+              <button id="isolateButton" type="button" class="btn action-btn" disabled>▣ <span>Isolate</span></button>
+            </div>
+            <p class="hint">Decisions affect network integrity. Investigate before acting.</p>
+          </section>
+          <section class="side-panel agent-panel">
+            <div class="agent-heading"><div class="agent-avatar" aria-hidden="true">✧</div><div><div class="overline">RULES-BASED COPILOT PREVIEW</div><h2>AEGIS <span class="online-indicator">● ONLINE</span></h2></div></div>
+            <p id="agentMessage" class="agent-message" role="status">AEGIS is standing by. Select an alert to request guidance.</p>
+            <button id="agentButton" type="button" class="btn btn-agent" disabled>✧ Ask AEGIS for guidance <span>↗</span></button>
+            <p class="ai-disclaimer">Transparent local decision rules. Human-approved actions only. No LLM, API key, or paid service.</p>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="footer"><span>BREACHWAVE / A FICTIONAL CYBER-DEFENSE SIMULATION</span><span>NO REAL SYSTEMS OR ACCOUNTS ARE ACCESSED</span></footer>
+    </div>
+
+    <div id="screenOverlay" class="screen-overlay">
+      <div class="overlay-card">
+        <div class="hero-orbit" aria-hidden="true"><span>⌁</span></div>
+        <div id="overlayEyebrow" class="overline hero-eyebrow">MISSION BRIEFING // SECTOR 01</div>
+        <h2 id="overlayTitle" class="overlay-title">THE NETWORK<br><em>IS UNDER SIEGE.</em></h2>
+        <p id="overlayDescription" class="overlay-description">Command a network defense operation. Investigate synthetic attacks, deploy countermeasures, and consult AEGIS—your automated security copilot.</p>
+        <div id="missionPicker" class="mission-picker">
+          <div class="picker-heading"><strong>SELECT YOUR MISSION</strong><span id="progressNote">4 CAMPAIGN SECTORS</span></div>
+          <div id="missionCards" class="mission-cards" role="group" aria-label="Available game missions"></div>
+          <label class="difficulty-select" for="difficultySelect">DIFFICULTY
+            <select id="difficultySelect"><option value="cadet">Cadet · learning</option><option value="operator" selected>Operator · balanced</option><option value="expert">Expert · intense</option></select>
+          </label>
+          <p id="missionBrief" class="mission-brief"></p>
+        </div>
+        <div id="overlayResults" class="overlay-results" hidden></div>
+        <div id="achievementAwards" class="achievement-awards" hidden></div>
+        <button id="reportButton" class="btn btn-outline" type="button" hidden>▤ View Incident Report / Save PDF</button>
+        <div class="overlay-buttons"><button id="playButton" class="btn btn-primary btn-hero">▶ Quick Play</button><button id="guidedButton" class="btn btn-outline btn-hero">⌕ Guided Tutorial</button></div>
+        <p class="overlay-footnote">NO LOGIN · NO DOWNLOAD · FULLY FICTIONAL SCENARIOS</p>
+      </div>
+    </div>
+
+    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle">
+      <div class="dialog-top"><div class="overline">FIELD MANUAL</div><button id="closeHelp" class="btn btn-ghost" type="button" aria-label="Close instructions">✕</button></div>
+      <h2 id="helpTitle">How to play BREACHWAVE</h2>
+      <p class="dialog-intro">Three simple steps. Protect your network while keeping legitimate services online.</p>
+      <ol class="manual-steps">
+        <li><strong>1. Select an alert</strong><span>Click a pulsing alert marker on the map, or select it from the Active Alerts list.</span></li>
+        <li><strong>2. Investigate</strong><span>Review synthetic evidence. Ask AEGIS for guidance if you want a second opinion.</span></li>
+        <li><strong>3. Respond</strong><span>Block confirmed threats, allow legitimate activity, or isolate when you need a stronger response.</span></li>
+      </ol>
+      <div class="manual-note"><strong>Watch the tradeoffs:</strong> A missed attack damages network integrity. Blocking legitimate traffic causes disruption. Survive every wave in your chosen mission to win. Try Quick Defense first, then unlock campaign missions and new countermeasures.</div>
+      <p class="manual-extra">Tip: Incoming signals travel along glowing paths. Optional defensive abilities sit below the map. The Engineering View reveals synthetic event logs and how AEGIS formed each recommendation.</p>
+      <button id="helpTutorialButton" type="button" class="btn btn-primary dialog-cta">Start Interactive Tutorial →</button>
+    </dialog>
+
+    <dialog id="reportDialog" class="report-dialog" aria-labelledby="reportTitle">
+      <div class="report-toolbar"><span>BREACHWAVE / POST-INCIDENT REVIEW</span><div><button id="printReport" type="button" class="btn btn-primary">▤ Print / Save PDF</button><button id="closeReport" type="button" class="btn btn-ghost" aria-label="Close report">✕</button></div></div>
+      <article id="reportContent" class="report-content"></article>
+    </dialog>
+
+    <script type="module" src="./src/main.mjs"></script>
+  </body>
+</html>
