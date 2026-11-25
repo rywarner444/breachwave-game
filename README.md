@@ -4,9 +4,11 @@
 
 BREACHWAVE is an original, zero-dependency tactical cybersecurity game that runs entirely in a web browser. Play the role of a security operations defender: triage fictional alerts, inspect evidence, use explainable AEGIS recommendations, and stop coordinated attacks without disrupting legitimate services.
 
-> **Status:** Playable milestone **v0.2** — expanded campaign, animated network telemetry, engineering observability, and printable incident reports. **The GitHub repository remains private during development.** A public GitHub Pages link will follow only when the owner approves publishing.
+### [▶ Play BREACHWAVE in your browser](https://rywarner444.github.io/breachwave-game/)
 
-## Try it locally (or in GitHub Codespaces)
+> **Status:** **v0.2 live on GitHub Pages** — expanded campaign, animated network telemetry, engineering observability, and printable incident reports. Open the link above to play instantly; no installation or account is required.
+
+## Run locally (or in GitHub Codespaces)
 
 Requirements: Node.js 20.11+ (Node 22 recommended), a modern browser. **No API keys, accounts, databases, paid AI credits, or dependencies to install.**
 
@@ -106,6 +108,6 @@ BREACHWAVE was built using AI-assisted code generation and iterative human-direc
 
 Potential future enhancements include accessibility playtesting, more balanced scenario packs, analytics limited to the local device, and a recorded demo. A live LLM integration is **not planned for this milestone**; it would require explicit security, budget, and backend decisions.
 
-## Publishing
+## Public demo
 
-The repository is kept **private** while testing and iterating. When ready, the owner can explicitly approve making it public and enabling GitHub Pages so employers can play directly in their browsers with a single link.
+The game is publicly playable at **[rywarner444.github.io/breachwave-game](https://rywarner444.github.io/breachwave-game/)** and its source is available in this repository. GitHub Pages serves the static application; no backend, login, model API key, or paid service is involved. For a quick demonstration, choose **Quick Play** on the start screen, or select **Guided Tutorial** to learn the controls.
